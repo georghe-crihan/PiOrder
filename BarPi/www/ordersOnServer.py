@@ -1,17 +1,20 @@
-from os.path import basename
+from os import listdir
+from os.path import basename, isfile, join as pjoin
 
-processedOreders = []
 # Should be /var/spool
-directory='/tmp/kpos/'
-# FIXME: Rewrite to dir handling.
-output = shell_exec('find /tmp/kpos | grep printAtBar | grep processed | grep order')
-output = output.split("\n")
+spoolDir='/tmp/kpos'
 
-for filePath in output:
-    # Strip out the filename to the key
-    key = basename(filePath)
-    # Get the order content
-    with open(filePath, 'r') ad file:
-        # Put into an array
-        processedOrders[key]=file.read()
+# FIXME: this would be called from the template.
+@app.route('/ordersOnServer')
+def ordersOnServer():
+    processedOreders = []
+    onlyfiles = [ f for f in listdir(spoolDir) if isfile(pjoin(spoolDir, f))]
+    for filePath in onlyFiles:
+        # Strip out the filename to the key
+        key = basename(filePath)
+        if 'printAtBar' in key and 'processed' in key and 'order' in key: 
+            # Get the order content
+            with open(filePath, 'r') ad fp:
+                # Put into an array
+                processedOrders[key]=fp.read()
 

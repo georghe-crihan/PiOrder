@@ -6,6 +6,9 @@ import time
 import usb.core
 import usb.util
 
+debug = False
+header = False
+
 FEED_PAST_CUTTER = b'\n' * 5
 NEWLINE = b'\n'
 USB_BUSY = 66
@@ -86,15 +89,17 @@ def printToPrinter(text):
     # no need to close the text_file manually.  This method ensures that the
     # close is called in all situation (including unhandled exceptions).
     
-    #usb_endpoint.write(b'\x1b!\x80')
-    #usb_endpoint.write("Khyber Tandoori")
-    #usb_endpoint.write("KHYBER TANDOORI RESTAURANT")
-    #usb_endpoint.write(NEWLINE)
-    #usb_endpoint.write(b'\x1b!\x00')
-    usb_endpoint.write(b'\x1b!\x20')
-    usb_endpoint.write(NEWLINE)
-    usb_endpoint.write(NEWLINE)
-    usb_endpoint.write(NEWLINE)
+    if header:
+        usb_endpoint.write(b'\x1b!\x80')
+        usb_endpoint.write("Khyber Tandoori")
+        usb_endpoint.write("KHYBER TANDOORI RESTAURANT")
+        usb_endpoint.write(NEWLINE)
+        usb_endpoint.write(b'\x1b!\x00')
+    else:
+        usb_endpoint.write(b'\x1b!\x20')
+        usb_endpoint.write(NEWLINE)
+        usb_endpoint.write(NEWLINE)
+        usb_endpoint.write(NEWLINE)
 
     # Print a char at a time and check the printers buffer isn't full
     for x in text:
@@ -106,8 +111,9 @@ def printToPrinter(text):
             time.sleep(0.01)
             res = dev.ctrl_transfer(0xC0, 0x0E, 0x020E, 0, 2)
     
-    #from time import strftime
-    #timeNow=strftime("%a %d-%b-%Y %H:%M:%S")    
-    #usb_endpoint.write(timeNow)
+    if debug:
+        from time import strftime
+        timeNow=strftime("%a %d-%b-%Y %H:%M:%S")    
+        usb_endpoint.write(timeNow)
     usb_endpoint.write(FEED_PAST_CUTTER)
     usb.util.dispose_resources(dev)
