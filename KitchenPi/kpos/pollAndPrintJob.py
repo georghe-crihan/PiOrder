@@ -6,6 +6,10 @@ def playSoundsForChefs():
    /usr/bin/omxplayer --no-osd /home/pi/kpos/Alesis-S4-Plus-BrassSect-C3.wav > /dev/null
    /usr/bin/omxplayer --no-osd /home/pi/kpos/Steel-Bell-C6.wav > /dev/null
 
+def anyFiles(d):
+    from os import listdir
+    return [ f for f in listdir(d) if (isfile(pjoin(d, f) and 'order' in f)) ]
+
 def parseAndPrintJobAtKitchen(jobToPrint, dirOnSuccess, dirOnFailure):
     from xml.dom import minidom
     from time import sleep 

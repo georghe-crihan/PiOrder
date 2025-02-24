@@ -14,11 +14,8 @@ def createSSHClient(server, port, user, password):
     return client
 
 def anyFiles(d):
-    fname = pjoin(d, '*order*')
-    if True: # Any matching files in d
-        return True
-    else:
-        return False
+    from os import listdir
+    return [ f for f in listdir(d) if (isfile(pjoin(d, f) and 'order' in f)) ]
 
 def parseAndPrintJobAtBar(jobToPrint, dirOnSuccess, dirOnFailure):
     from xml.dom import minidom
